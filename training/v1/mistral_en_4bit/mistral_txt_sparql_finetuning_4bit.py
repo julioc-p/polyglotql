@@ -24,7 +24,7 @@ from huggingface_hub import login
 login(HF_TOKEN)
 
 
-ds = load_dataset("julioc-p/Question-Sparql", split="train")
+ds = load_dataset("<author>/Question-Sparql", split="train")
 
 
 ds_en = ds.filter(

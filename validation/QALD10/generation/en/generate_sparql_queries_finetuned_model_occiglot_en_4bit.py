@@ -32,7 +32,7 @@ bnb_config = BitsAndBytesConfig(
 )
 
 base_model = "occiglot/occiglot-7b-eu5-instruct"
-model_name = "julioc-p/occiglot-7b-eu5-instruct-txt-sparql-en-Instruct-txt-sparql_4bit"
+model_name = "<author>/occiglot-7b-eu5-instruct-txt-sparql-en-Instruct-txt-sparql_4bit"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 set_seed(42)
@@ -44,7 +44,7 @@ tokenizer = AutoTokenizer.from_pretrained(base_model)
 
 tokenizer.pad_token = tokenizer.eos_token
 
-dataset = load_dataset("julioc-p/Question-Sparql", split="validation")
+dataset = load_dataset("<author>/Question-Sparql", split="validation")
 
 
 def extract_sparql(text):

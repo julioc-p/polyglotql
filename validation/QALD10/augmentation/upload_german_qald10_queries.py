@@ -8,7 +8,7 @@ from huggingface_hub import (
     notebook_login,
 )
 
-YOUR_HF_USERNAME = "julioc-p"
+YOUR_HF_USERNAME = "<author>"
 YOUR_DATASET_NAME = "Question-Sparql"
 HF_DATASET_ID = f"{YOUR_HF_USERNAME}/{YOUR_DATASET_NAME}"
 QALD10_JSON_URL = (

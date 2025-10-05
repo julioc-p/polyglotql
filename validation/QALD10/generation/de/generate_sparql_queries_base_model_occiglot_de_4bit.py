@@ -11,6 +11,7 @@ from transformers import (
     MistralForCausalLM,
 )
 import re
+
 use_4bit = True
 bnb_4bit_compute_dtype = "bfloat16"
 bnb_4bit_quant_type = "nf4"
@@ -29,10 +30,8 @@ model = MistralForCausalLM.from_pretrained(
     model_name, quantization_config=bnb_config
 ).to(device)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
-tokenizer.pad_token = (
-    tokenizer.eos_token
-)
-dataset = load_dataset("julioc-p/Question-Sparql", split="validation")
+tokenizer.pad_token = tokenizer.eos_token
+dataset = load_dataset("<author>/Question-Sparql", split="validation")
 dataset = dataset.filter(lambda x: x["language"] == "de")
 sparql_pattern_strict = re.compile(
     r"""
@@ -53,6 +52,8 @@ sparql_pattern_strict = re.compile(
     """,
     re.DOTALL | re.IGNORECASE | re.VERBOSE,
 )
+
+
 def extract_sparql(text):
     """
     Extracts the first potential SPARQL query block from text, attempting to stop
@@ -77,6 +78,8 @@ def extract_sparql(text):
         if fallback_match:
             return fallback_match.group(0).strip()
     return ""
+
+
 output_data = []
 batch_size = 64
 for batch in dataset.iter(batch_size=batch_size):

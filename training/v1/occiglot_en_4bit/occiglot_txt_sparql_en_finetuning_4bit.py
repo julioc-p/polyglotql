@@ -1,22 +1,9 @@
-
-
-
 import os
 
 os.environ["HF_HUB_CACHE"] = "/netscratch/jperez/huggingface"
 os.environ["HF_HOME"] = "/netscratch/jperez/huggingface"
 os.environ["TRANSFORMERS_CACHE"] = "/netscratch/jperez/huggingface"
 HF_TOKEN = os.getenv("HF_TOKEN")
-
-
-
-
-
-
-
-
-
-
 
 
 import json
@@ -38,16 +25,10 @@ from trl import SFTTrainer
 from huggingface_hub import login
 
 
-
-
 login(HF_TOKEN)
 
 
-
-
-ds = load_dataset("julioc-p/Question-Sparql", split="train")
-
-
+ds = load_dataset("<author>/Question-Sparql", split="train")
 
 
 ds_en = ds.filter(
@@ -56,23 +37,13 @@ ds_en = ds.filter(
 )
 
 
-
-
-
-
-
-
 ds_en = ds_en.shuffle(seed=42).select(range(35000))
-
-
 
 
 model_name = "occiglot/occiglot-7b-eu5-instruct"
 tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
 tokenizer.pad_token = tokenizer.eos_token
 tokenizer.padding_side = "right"
-
-
 
 
 def create_chat_format(txt, sparql_query, knowledge_graph):
@@ -106,8 +77,6 @@ def process_jsonl_file(output_file_path):
 process_jsonl_file("/netscratch/jperez/training_dataset_occiglot_en_4bit.jsonl")
 
 
-
-
 train_dataset = load_dataset(
     "json",
     data_files="/netscratch/jperez/training_dataset_occiglot_en_4bit.jsonl",
@@ -115,14 +84,12 @@ train_dataset = load_dataset(
 )
 
 
-
-
 train_dataset["text"]
 
 
-
-
-new_model = "/netscratch/jperez/occiglot-7b-eu5-instruct-sparql-en-Instruct-txt-sparql_4bit" 
+new_model = (
+    "/netscratch/jperez/occiglot-7b-eu5-instruct-sparql-en-Instruct-txt-sparql_4bit"
+)
 
 
 lora_r = 64
@@ -184,8 +151,6 @@ packing = False
 device_map = {"": 0}
 
 
-
-
 model_name = "occiglot/occiglot-7b-eu5-instruct"
 
 compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
@@ -209,8 +174,6 @@ tokenizer.pad_token = tokenizer.eos_token
 tokenizer.padding_side = "right"
 
 
-
-
 system_prompt = """You are an expert in SPARQL query generation. Generate the SPARQL query that answers the user's question."""
 
 messages = [
@@ -224,7 +187,7 @@ messages = [
 encodeds = tokenizer.apply_chat_template(
     messages,
     tokenize=True,
-    add_generation_prompt=True, 
+    add_generation_prompt=True,
     return_tensors="pt",
 ).to("cuda")
 
@@ -236,12 +199,6 @@ response = tokenizer.decode(
     generated_ids[0][encodeds.shape[1] :], skip_special_tokens=True
 )
 print("Generated SPARQL query:\n", response)
-
-
-
-
-
-
 
 
 peft_config = LoraConfig(
@@ -286,13 +243,11 @@ trainer = SFTTrainer(
     train_dataset=train_dataset,
     peft_config=peft_config,
     dataset_text_field="text",
-    max_seq_length=max_seq_length, 
+    max_seq_length=max_seq_length,
     tokenizer=tokenizer,
     args=training_arguments,
     packing=packing,
 )
-
-
 
 
 trainer.train()
@@ -300,13 +255,11 @@ trainer.train()
 trainer.model.save_pretrained(new_model)
 
 upload_folder(
-    repo_id="julioc-p/occiglot-7b-eu5-instruct-txt-sparql-en-Instruct-txt-sparql_4bit",
+    repo_id="<author>/occiglot-7b-eu5-instruct-txt-sparql-en-Instruct-txt-sparql_4bit",
     folder_path="/netscratch/jperez/occiglot-7b-eu5-instruct-sparql-en-Instruct-txt-sparql_4bit",
     commit_message="4bit fine-tuned model",
     path_in_repo=".",
 )
-
-
 
 
 system_prompt = """You are an expert in SPARQL query generation. Generate the SPARQL query that answers the user's question."""
@@ -322,7 +275,7 @@ messages = [
 encodeds = tokenizer.apply_chat_template(
     messages,
     tokenize=True,
-    add_generation_prompt=True, 
+    add_generation_prompt=True,
     return_tensors="pt",
 ).to("cuda")
 
@@ -334,5 +287,3 @@ response = tokenizer.decode(
     generated_ids[0][encodeds.shape[1] :], skip_special_tokens=True
 )
 print("Generated SPARQL query:\n", response)
-
-

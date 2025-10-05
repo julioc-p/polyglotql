@@ -18,7 +18,7 @@ from trl import SFTTrainer
 from huggingface_hub import login
 
 login(HF_TOKEN)
-ds = load_dataset("julioc-p/Question-Sparql", split="train")
+ds = load_dataset("<author>/Question-Sparql", split="train")
 ds_de = ds.filter(
     lambda x: x["language"] == "de"
     and x["sparql_query"].lower() not in ["out of scope", "none"]
@@ -174,7 +174,7 @@ generated_ids = base_model.generate(model_inputs, max_new_tokens=1000, do_sample
 decoded = tokenizer.batch_decode(generated_ids)
 print(decoded[0])
 upload_folder(
-    repo_id="julioc-p/mistral_de_txt_sparql_4bit",
+    repo_id="<author>/mistral_de_txt_sparql_4bit",
     folder_path="/netscratch/jperez/mistralai-sparql-de-Instruct-txt-sparql_4bit",
     path_in_repo=".",
 )

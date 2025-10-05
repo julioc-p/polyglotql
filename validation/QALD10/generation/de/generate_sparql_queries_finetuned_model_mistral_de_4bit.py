@@ -18,7 +18,7 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_use_double_quant=use_nested_quant,
 )
 base_model_name = "mistralai/Mistral-7B-Instruct-v0.1"
-model_name = "julioc-p/mistral_de_txt_sparql_4bit"
+model_name = "<author>/mistral_de_txt_sparql_4bit"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 print("Loading model...")
@@ -36,7 +36,7 @@ print(
     f"Tokenizer pad token set to: {tokenizer.pad_token} (ID: {tokenizer.pad_token_id})"
 )
 print("Loading dataset...")
-dataset = load_dataset("julioc-p/Question-Sparql", split="validation")
+dataset = load_dataset("<author>/Question-Sparql", split="validation")
 dataset = dataset.filter(lambda x: x["language"] == "de")
 print(f"Dataset loaded with {len(dataset)} examples.")
 BATCH_SIZE = 256

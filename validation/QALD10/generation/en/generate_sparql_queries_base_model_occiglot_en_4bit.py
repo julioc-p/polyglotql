@@ -36,7 +36,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 tokenizer.pad_token = tokenizer.eos_token
 
-dataset = load_dataset("julioc-p/Question-Sparql", split="validation")
+dataset = load_dataset("<author>/Question-Sparql", split="validation")
 
 
 def extract_sparql(text):

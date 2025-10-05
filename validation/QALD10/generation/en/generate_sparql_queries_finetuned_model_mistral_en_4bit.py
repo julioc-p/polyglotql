@@ -20,7 +20,7 @@ bnb_config = BitsAndBytesConfig(
 )
 
 base_model_name = "mistralai/Mistral-7B-Instruct-v0.1"
-model_name = "julioc-p/mistral_en_txt_sparql_4bit"
+model_name = "<author>/mistral_en_txt_sparql_4bit"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 
@@ -45,7 +45,7 @@ print(
 )
 
 print("Loading dataset...")
-dataset = load_dataset("julioc-p/Question-Sparql", split="validation")
+dataset = load_dataset("<author>/Question-Sparql", split="validation")
 print(f"Dataset loaded with {len(dataset)} examples.")
 
 BATCH_SIZE = 64

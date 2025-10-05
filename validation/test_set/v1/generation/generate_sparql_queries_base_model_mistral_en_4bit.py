@@ -38,7 +38,7 @@ if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
     print("Set pad_token to eos_token")
 print("Loading and filtering dataset...")
-dataset_full = load_dataset("julioc-p/Question-Sparql", split="train")
+dataset_full = load_dataset("<author>/Question-Sparql", split="train")
 ds_en = dataset_full.filter(
     lambda x: x["language"] == "en"
     and x["sparql_query"] is not None

@@ -19,7 +19,7 @@ from trl import SFTTrainer
 from huggingface_hub import login
 
 login(HF_TOKEN)
-ds = load_dataset("julioc-p/Question-Sparql", split="train")
+ds = load_dataset("<author>/Question-Sparql", split="train")
 ds_en = ds.filter(
     lambda x: x["language"] == "de"
     and x["sparql_query"].lower() not in ["out of scope", "none"]
@@ -183,7 +183,7 @@ trainer = SFTTrainer(
 trainer.train()
 trainer.model.save_pretrained(new_model)
 upload_folder(
-    repo_id="julioc-p/occiglot-7b-eu5-instruct-txt-sparql-en-Instruct-txt-sparql_4bit",
+    repo_id="<author>/occiglot-7b-eu5-instruct-txt-sparql-en-Instruct-txt-sparql_4bit",
     folder_path="/netscratch/jperez/occiglot-7b-eu5-instruct-sparql-en-Instruct-txt-sparql_4bit",
     commit_message="4bit fine-tuned model",
     path_in_repo=".",
@@ -210,6 +210,6 @@ response = tokenizer.decode(
 )
 print("Generated SPARQL query:\n", response)
 upload_folder(
-    repo_id="julioc-p/occiglot-7b-eu5-instruct-txt-de-sparql_4bit",
+    repo_id="<author>/occiglot-7b-eu5-instruct-txt-de-sparql_4bit",
     folder_path="/netscratch/jperez/occiglot-7b-eu5-instruct-sparql-de-4bit",
 )
